@@ -9,14 +9,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     final UserService service;
-
     public SecurityConfig(UserService service) {
         this.service = service;
     }
+
     // sql -> jpa query -> user control
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       // auth.userDetailsService(service).passwordEncoder(service.encoder());
+        auth.userDetailsService((service)).passwordEncoder(service.encoder());
     }
 
     // hangi yöntemle giriş yapılarak, rollere göre hangi servis kullanılcak?
@@ -35,6 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .logout().logoutUrl("/admin/logout").invalidateHttpSession(true) ;
         http.headers().frameOptions().disable(); // h2-console for using
-*/
+         */
     }
 }
