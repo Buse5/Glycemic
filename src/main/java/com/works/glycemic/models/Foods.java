@@ -15,6 +15,7 @@ public class Foods extends BaseModel{
     private Long gid;
 
     private Integer cid;
+    @Column(unique = true)
     private String name;
     private Integer glycemicindex;
     @Column(length = 10000)

@@ -21,5 +21,5 @@ public class BaseModel {
     @CreatedBy
     private String createdBy;
     @LastModifiedBy
-    private String modifieddBy;
+    private String modifiedBy;
 }
