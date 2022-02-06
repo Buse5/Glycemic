@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -27,9 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .authorizeHttpRequests()
-                .antMatchers("/foods/save").hasRole("user")
-                .antMatchers("/foods/userFoodList").hasAnyRole("user","admin")
-                .antMatchers("/foods/list").hasAnyRole("global","user","admin")
+                .antMatchers("/foods/save","/foods/userFoodList","/foods/foodDelete","/foods/foodUpdate").hasAnyRole("user", "admin")
+                .antMatchers("/foods/list").hasAnyRole("global","user", "admin")
                 .antMatchers("/register/**").permitAll()
                 .and()
                 .csrf().disable()
