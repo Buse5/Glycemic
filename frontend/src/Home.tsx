@@ -6,6 +6,7 @@ import NavBar from './components/NavBar';
 import FoodItems from './components/FoodItems';
 import { zoomIn } from 'react-animations'
 import styled, { keyframes } from 'styled-components';
+import { Grid } from 'semantic-ui-react';
 
 const animation = keyframes`${zoomIn}`
 const AnimateDiv = styled.div`
@@ -39,13 +40,13 @@ export default function Home() {
       <AnimateDiv>
         <h1 style={{ textAlign: "center", color: "tomato", textShadow: "initial", fontFamily: "monospace", fontSize: 50 }}> ALL FOODS </h1>
       </AnimateDiv>
-
-            {
-              foodsArr.map((item, index) =>
-                <FoodItems key={index} item={item} />
-              )
-            }
-   
+      <Grid>
+        {
+          foodsArr.map((item, index) =>
+           <FoodItems  key={index}  item={item} />
+          )
+        }
+      </Grid>
     </>
   );
 }
