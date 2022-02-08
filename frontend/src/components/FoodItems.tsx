@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Icon, Label } from 'semantic-ui-react';
+import { Button, Grid, Icon, Label } from 'semantic-ui-react';
 import { ResultFoods } from '../models/IFoods';
 import Moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 interface foodsModel {
     item: ResultFoods
 }
-function itemColor(glyIndex: any) {
+function glyColor(glyIndex: any) {
     if (glyIndex <= 55) {
         return <div style={{ backgroundColor: "#00d900", borderRadius: 20 }}><Icon link name='pointing down' /> Glycemic Index  <Icon link name='pointing down' /></div>
     } else if (glyIndex > 55 && glyIndex <= 70) {
-        return <div style={{ backgroundColor: "#f57f0a", borderRadius: 20 }}><Icon link name='pointing down' /> Glycemic Index  <Icon link name='pointing down' /> </div>
+        return <div style={{ backgroundColor: "orange", borderRadius: 20 }}><Icon link name='pointing down' /> Glycemic Index  <Icon link name='pointing down' /> </div>
     } else {
         return <div style={{ backgroundColor: "#ff0000", borderRadius: 20 }}><Icon link name='pointing down' /> Glycemic Index  <Icon link name='pointing down' /> </div>
     }
 
 }
+
+
 export default function FoodItems(foods: foodsModel) {
     return <>
         <Grid.Column mobile={8} tablet={8} computer={4}>
@@ -24,16 +27,15 @@ export default function FoodItems(foods: foodsModel) {
                     <div className="header" style={{ textAlign: "center", backgroundColor: "#54f764", opacity: 0.9 }}>Meyve</div>
                     <div className="header" style={{ textAlign: "center" }}>
                         <img src={foods.item.image} ></img>
-                        <h2 className="header" style={{ textAlign: "center" }}>{foods.item.name}</h2>
+                        <h3 className="header" style={{ textAlign: "center" }}>{foods.item.name}</h3>
                     </div>
                     <div className="content">
                         <div className="meta" >
-                            <h3 style={{ textAlign: "center", color: "black" }}>{itemColor(foods.item.glycemicindex)} {foods.item.glycemicindex}</h3>
+                            <h3 style={{ textAlign: "center", color: "black" }}>{glyColor(foods.item.glycemicindex)} {foods.item.glycemicindex}</h3>
                         </div>
                     </div>
                     <div className="extra content" >Created By:
                         <span className="right floated">
-
                             {foods.item.createdBy}
                         </span >
                         <br></br>Modified By:
@@ -47,12 +49,22 @@ export default function FoodItems(foods: foodsModel) {
                             <i className="calendar icon"></i>
                             {Moment(foods.item.createdDate).format("DD/MM/YY")}
                         </span>
+                        <br></br>
                         Modified Date:
                         <span className="right floated">
                             <i className="calendar icon"></i>
                             {Moment(foods.item.modifiedDate).format("DD/MM/YY")}
                         </span>
                     </div>
+                    <div className="extra content" >
+                        <div className='ui two buttons'>
+                            <Button basic color="green">
+                                <Icon name="info"/> Detay
+                            </Button>
+                            <Button basic color="red">
+                                <Icon name="food"/> Ekle
+                            </Button>
+                        </div> </div>
                 </div>
             </div>
         </Grid.Column>

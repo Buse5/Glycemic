@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from 'semantic-ui-react';
 
 export default function NavBar() {
   return (
@@ -11,14 +12,12 @@ export default function NavBar() {
             <a className="item" href="/contact" aria-current='page'>Contact</a>
             <a className="item" href="/login" aria-current='page'>Login</a>
             <div className="right menu">
-              <div className="item">
-                <div className="ui icon input">
-                  <input type="text" placeholder="Search..." />
-                  <i className="search link icon"></i>
-                </div>
-              </div>
+             
               <div className="item">
                 <a className="nav-link disabled" style={{ color: "tomato" }}>  Kullanıcı adı  </a>
+              </div>
+              <div className="item">
+              <Icon link name='shopping basket' size='big'></Icon>
               </div>
             </div>
           </div>
