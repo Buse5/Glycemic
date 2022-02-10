@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers("/foods/save","/foods/userFoodList","/foods/foodDelete","/foods/foodUpdate").hasAnyRole("user", "admin")
-                .antMatchers("/foods/list").hasAnyRole("global","user", "admin")
+                .antMatchers("/foods/list", "foods/detail/**").hasAnyRole("global","user", "admin")
                 .antMatchers("/register/**").permitAll()
                 .and()
                 .csrf().disable()

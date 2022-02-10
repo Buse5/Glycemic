@@ -3,10 +3,12 @@ package com.works.glycemic.restcontrollers;
 import com.works.glycemic.models.Foods;
 import com.works.glycemic.services.FoodService;
 import com.works.glycemic.utils.REnum;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -35,8 +37,8 @@ public class FoodsRestController {
         return hm;
     }
 
-
     // foods List
+    @Cacheable("foods_list")
     @GetMapping("/list")
     public Map<REnum, Object> list() {
         Map<REnum, Object> hm = new LinkedHashMap<>();
@@ -45,7 +47,6 @@ public class FoodsRestController {
         hm.put(REnum.result, foodService.foodsList() );
         return hm;
     }
-
 
     // foods List
     @GetMapping("/userFoodList")
@@ -57,7 +58,6 @@ public class FoodsRestController {
         return hm;
     }
 
-
     @DeleteMapping("/foodDelete")
     public Map<REnum, Object> foodDelete(@RequestParam long gid) {
         return foodService.foodDelete(gid);
@@ -68,4 +68,19 @@ public class FoodsRestController {
         return foodService.userUpdateFood(food);
     }
 
+    @GetMapping("detail/{url}")
+    public Map<REnum, Object> singleFoodUrl(@PathVariable String url){
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        Optional<Foods> oFoods = foodService.singleFoodUrl(url);
+        if (oFoods.isPresent() ) {
+            hm.put(REnum.status, true);
+            hm.put(REnum.message, "Ürün detay alındı");
+            hm.put(REnum.result, oFoods.get());
+        }else {
+            hm.put(REnum.status, false);
+            hm.put(REnum.message, "Ürün detay bulunamadı");
+            hm.put(REnum.result, null);
+        }
+        return hm;
+    }
 }

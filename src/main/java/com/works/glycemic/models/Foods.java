@@ -22,5 +22,7 @@ public class Foods extends BaseModel{
     private String image;
     private String source;
     private boolean enabled;
+    private String url;
+
 
 }

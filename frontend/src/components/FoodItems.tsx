@@ -20,13 +20,25 @@ function glyColor(glyIndex: any) {
 
 
 export default function FoodItems(foods: foodsModel) {
+
+    const navigate = useNavigate()
+    // goto detail
+    const fncGotoDetail = (url: string) => {
+        navigate("/detail/" + url)
+    }
+
     return <>
         <Grid.Column mobile={8} tablet={8} computer={4}>
             <div className="ui cards ">
                 <div className="ui card">
                     <div className="header" style={{ textAlign: "center", backgroundColor: "#54f764", opacity: 0.9 }}>Meyve</div>
                     <div className="header" style={{ textAlign: "center" }}>
-                        <img src={foods.item.image} ></img>
+                        {foods.item.image !== "" &&
+                            <img src={foods.item.image} ></img>
+                        }
+                        {foods.item.image === "" &&
+                            <img src='./foods.png' style={{width:125, height: 125}} ></img>
+                        }
                         <h3 className="header" style={{ textAlign: "center" }}>{foods.item.name}</h3>
                     </div>
                     <div className="content">
@@ -58,11 +70,11 @@ export default function FoodItems(foods: foodsModel) {
                     </div>
                     <div className="extra content" >
                         <div className='ui two buttons'>
-                            <Button basic color="green">
-                                <Icon name="info"/> Detay
+                            <Button basic color="green" onClick={() => fncGotoDetail(foods.item.url!)}>
+                                <Icon name="info" /> Detay
                             </Button>
                             <Button basic color="red">
-                                <Icon name="food"/> Ekle
+                                <Icon name="food" /> Ekle
                             </Button>
                         </div> </div>
                 </div>
