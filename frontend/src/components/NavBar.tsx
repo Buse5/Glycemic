@@ -1,28 +1,46 @@
-import React from 'react';
-import { Icon } from 'semantic-ui-react';
+import React, { useState } from 'react'
+import { Input, Menu } from 'semantic-ui-react'
 
 export default function NavBar() {
+
+  const [activeItem, setActiveItem] = useState("")
+  const handleItemClick = (name:string) => {
+    setActiveItem(name)
+  }
+  const [open, setOpen] = React.useState(false)
+
   return (
-    <>
-      <div className="ui fixed borderless huge menu" style={{ background: "#54f764" }}>
-        <div className="ui container grid" >
-          <div className="computer only row">
-            <a className="item" href="/" style={{ color: "tomato" }}>Glycemic Indexs</a>
-            <a className="item" href="/" aria-current='page' >Home</a>
-            <a className="item" href="/contact" aria-current='page'>Contact</a>
-            <a className="item" href="/login" aria-current='page'>Login</a>
-            <div className="right menu">
-             
-              <div className="item">
-                <a className="nav-link disabled" style={{ color: "tomato" }}>  Kullanıcı adı  </a>
-              </div>
-              <div className="item">
-              <Icon link name='shopping basket' size='big'></Icon>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+    <Menu secondary style={{ backgroundColor: "#b7f7a8", borderRadius: 10, height: 50}}>
+        <Menu.Item
+          name='Anasayfa'
+          active={activeItem === 'Anasayfa'}
+          onClick={ (e, data) => handleItemClick(data.name!) }
+        />
+        <Menu.Item
+          name='Gıda Ekle'
+          active={activeItem === 'Gıda Ekle'}
+          onClick={ (e, data) => handleItemClick(data.name!) }
+        />
+        <Menu.Item
+          name='Eklediklerim'
+          active={activeItem === 'Eklediklerim'}
+          onClick={ (e, data) => handleItemClick(data.name!) }
+        />
+        <Menu.Menu position='right'>
+          <Menu.Item
+            name='Giriş Yap'
+            active={activeItem === 'Giriş Yap'}
+            onClose={() => setOpen(false)}
+            onOpen={() => setOpen(true)}
+            open={open}
+            onClick={ (e, data) => handleItemClick(data.name!) }
+          />
+          <Menu.Item
+            name='Kayıt Ol'
+            active={activeItem === 'Kayıt Ol'}
+            onClick={ (e, data) => handleItemClick(data.name!) }
+          />
+        </Menu.Menu>
+      </Menu>
   )
 }

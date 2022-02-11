@@ -3,6 +3,7 @@ import { Button, Grid, Icon, Label } from 'semantic-ui-react';
 import { ResultFoods } from '../models/IFoods';
 import Moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import { categories } from '../Datas';
 
 interface foodsModel {
     item: ResultFoods
@@ -31,7 +32,7 @@ export default function FoodItems(foods: foodsModel) {
         <Grid.Column mobile={8} tablet={8} computer={4}>
             <div className="ui cards ">
                 <div className="ui card">
-                    <div className="header" style={{ textAlign: "center", backgroundColor: "#54f764", opacity: 0.9 }}>Meyve</div>
+                    <div className="header" style={{ textAlign: "center", backgroundColor: "#54f764", opacity: 0.9 }}>{categories[foods.item.cid!].text}</div>
                     <div className="header" style={{ textAlign: "center" }}>
                         {foods.item.image !== "" &&
                             <img src={foods.item.image} ></img>
