@@ -132,8 +132,8 @@ export default function Home() {
                   />
                 </Grid.Column>
                 <Grid.Column width='2' >
-                  <Label>
-                    <Icon name='angle down' /> {foodsArr.length}
+                  <Label style={{textAlign:"center"}}>
+                    <Icon name='hand point down outline' style={{marginLeft:7}} /> {foodsArr.length}
                   </Label>
                 </Grid.Column>
               </Grid.Row>
