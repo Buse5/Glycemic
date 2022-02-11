@@ -53,57 +53,57 @@ export default function Home() {
   }, []);
 
 
-  const search = (q: string) => {
+  const search = ( q:string ) => {
     setSearchData(q)
-    if (q === "") {
+    if ( q === "" ) {
 
       setFoodsArr(searchArr)
-      if (Math.round(searchArr.length % postsperpage) === 0) {
-        setPageCount(searchArr.length / postsperpage)
-      } else {
-        setPageCount(Math.ceil(searchArr.length / postsperpage))
+      if(Math.round(searchArr.length%postsperpage) === 0){
+        setPageCount(searchArr.length /postsperpage)            
+      }else{           
+        setPageCount(Math.ceil(searchArr.length/postsperpage))              
       }
 
 
-    } else {
+    }else {
       q = q.toLowerCase()
-      var newArr = searchArr.filter(item => item.name?.toLowerCase().includes(q) || ("" + item.glycemicindex).includes(q))
-      if (selectCategory !== 0) {
-        newArr = newArr.filter(item => item.cid === selectCategory)
+      var newArr = searchArr.filter( item => item.name?.toLowerCase().includes(q) || (""+item.glycemicindex).includes(q) )
+      if ( selectCategory !== 0 ) {
+        newArr = newArr.filter( item => item.cid === selectCategory )
       }
       setFoodsArr(newArr)
-      if (Math.round(newArr.length % postsperpage) === 0) {
-        setPageCount(newArr.length / postsperpage)
-      } else {
-        setPageCount(Math.ceil(newArr.length / postsperpage))
-      }
+      if(Math.round(newArr.length%postsperpage) === 0){
+          setPageCount(newArr.length /postsperpage)            
+      }else{           
+          setPageCount(Math.ceil(newArr.length/postsperpage))              
+        }
     }
   }
 
 
   // select cat
-  const catOnChange = (str: string) => {
+  const catOnChange = ( str: string ) => {
     const numCat = parseInt(str)
-    setSelectCategory(numCat)
+    setSelectCategory( numCat )
 
-    console.log(numCat)
+    console.log( numCat )
 
     var newArr: ResultFoods[] = searchArr
-    if (numCat !== 0) {
-      newArr = newArr.filter(item => item.cid === numCat)
+    if ( numCat !== 0 ) {
+      newArr = newArr.filter( item => item.cid === numCat )
     }
-
-    if (searchData !== "") {
-      newArr = newArr.filter(item => item.name?.toLowerCase().includes(searchData) || ("" + item.glycemicindex).includes(searchData))
+    
+    if ( searchData !== "" ) {
+      newArr = newArr.filter( item => item.name?.toLowerCase().includes(searchData) || (""+item.glycemicindex).includes(searchData) )
     }
     setFoodsArr(newArr)
 
-    console.log(newArr)
+    console.log( newArr )
 
-    if (Math.round(newArr.length % postsperpage) === 0) {
-      setPageCount(newArr.length / postsperpage)
-    } else {
-      setPageCount(Math.ceil(newArr.length / postsperpage))
+    if(Math.round(newArr.length%postsperpage) === 0){
+      setPageCount(newArr.length /postsperpage)            
+    }else{           
+        setPageCount(Math.ceil(newArr.length/postsperpage))              
     }
 
   }
@@ -118,7 +118,6 @@ export default function Home() {
       <Grid columns='2'>
         <Grid.Row>
           <Grid.Column>
-
             <Grid>
               <Grid.Row>
                 <Grid.Column width='14'>
@@ -137,8 +136,8 @@ export default function Home() {
                   </Label>
                 </Grid.Column>
               </Grid.Row>
-            </Grid>  </Grid.Column>
-
+            </Grid>  
+          </Grid.Column>
           <Grid.Column>
             <Select onChange={(e, data) => catOnChange("" + data.value)} fluid options={categories} placeholder='Kategori Seç' />
           </Grid.Column>

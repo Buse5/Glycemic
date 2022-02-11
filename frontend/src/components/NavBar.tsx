@@ -1,133 +1,180 @@
-import React, { useState } from 'react'
-import { Button, Checkbox, Form, Header, Icon, Input, Menu, Modal } from 'semantic-ui-react'
+import React, { useEffect, useState } from 'react'
+import { Menu, Button, Modal, Form, Icon } from 'semantic-ui-react'
+import { cities } from '../Datas';
+import { IUser } from '../models/IUser';
+import { userAndAdminLogin } from '../Services';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export default function NavBar() {
 
   const [activeItem, setActiveItem] = useState("")
-  const handleItemClick = (name: string) => {
-    setActiveItem(name)
+  
+  // modal delete state
+  const [modalStatus, setModalStatus] = useState(false);
+  const [modalLoginStatus, setModalLoginStatus] = useState(false)
 
+  // login and register states
+  const [userName, setUserName] = useState("");
+  const [userSurname, setUserSurname] = useState("");
+  const [userPhone, setUserPhone] = useState("");
+  const [userMail, setUserMail] = useState("");
+  const [userPass, setUserPass] = useState("");
+
+  // login status
+  const [loginStatus, setLoginStatus] = useState(false)
+  useEffect(() => {
+    console.log( "useEffect Call" )
+  }, [loginStatus])
+  
+  
+   
+  const handleItemClick = (name:string) => {
+    setActiveItem(name)
   }
-  const [open, setOpen] = React.useState(false)
+
+  const showModal = () => {
+    setModalStatus(true);
+  }
+
+const showLoginModalStatus = () => {
+    setModalLoginStatus(true);
+  }
+
+
+  // login fnc
+  const login = () => {
+    toast.loading("Yükleniyor.")
+    userAndAdminLogin(userMail, userPass).then( res => {
+      const usr: IUser = res.data
+      if ( usr.status! ) {
+        const userResult = usr.result!
+        const stUserResult = JSON.stringify( userResult )
+        localStorage.setItem( "user", stUserResult )
+        setLoginStatus( usr.status! )
+      }
+      toast.dismiss();
+    }).catch( err => {
+      toast.dismiss();
+      toast.error( "Bu yetkilerde bir kullanıcı yok!" )
+    })
+  }
+
+  // register fnc
+  const register = () => {
+    console.log( userMail + " " + userPass )
+  }
 
   return (
     <>
-    
-      <Menu secondary style={{ backgroundColor: "#b7f7a8", borderRadius: 10, height: 50 }}>
-        <Menu.Item
-          name='Anasayfa'
-          active={activeItem === 'Anasayfa'}
-          onClick={(e, data) => handleItemClick(data.name!)}
-        />
-        <Menu.Item
-          name='Gıda Ekle'
-          active={activeItem === 'Gıda Ekle'}
-          onClick={(e, data) => handleItemClick(data.name!)}
-        />
-        <Menu.Item
-          name='Eklediklerim'
-          active={activeItem === 'Eklediklerim'}
-          onClick={(e, data) => handleItemClick(data.name!)}
-        />
-        <Menu.Menu position='right'>
-          <Modal
-            size="small"
-            onClose={() => setOpen(false)}
-            onOpen={() => setOpen(true)}
-            open={open}
-            trigger={<Button style={{ backgroundColor: "#b7f7a8" }}>Giriş Yap</Button>}
-          >
-            <Modal.Header style={{textAlign:"center", fontSize:20, color: "tomato", textShadow: "initial", backgroundColor:"green"}} >Giriş Yap</Modal.Header>
-            <Modal.Content>
-              <Modal.Description>
+      <ToastContainer />
+        <Menu secondary style={{ backgroundColor: "#b7f7a8", borderRadius: 10, height: 60 }}>
+          <Menu.Item>
+            <img alt="logo" src='/logo.png' style={{width:50,height:50}}/>
+          </Menu.Item>
+            <Menu.Item
+            name='Anasayfa'
+            active={activeItem === 'Anasayfa'}
+            onClick={ (e, data) => handleItemClick(data.name!) }
+            />
+            <Menu.Item
+            name='Gıda Ekle'
+            active={activeItem === 'Gıda Ekle'}
+            onClick={ (e, data) => handleItemClick(data.name!) }
+            />
+            <Menu.Item
+            name='Eklediklerim'
+            active={activeItem === 'Eklediklerim'}
+            onClick={ (e, data) => handleItemClick(data.name!) }
+            />
+            <Menu.Menu position='right'>
+            <Menu.Item
+                name='Giriş Yap'
+                active={activeItem === 'Giriş Yap'}
+                onClick={ (e, data) => showLoginModalStatus() }
+            />
+            <Menu.Item
+                name='Kayıt Ol'
+                active={activeItem === 'Kayıt Ol'}
+                onClick={ (e, data) => showModal() }
+            />
+            </Menu.Menu>
+        </Menu>
+
+            <Modal
+                open={modalStatus}
+                onClose={ () => setModalStatus(false) } 
+                size="small"  
+            >
+            <Modal.Header style={{textAlign:"center", fontSize:20, color: "tomato", textShadow: "initial"}}>Kayıt Formu</Modal.Header>
+            <Modal.Content>   
+            <Modal.Description>
+                <p>Lütfen aşağıdaki bilgileri eksiksiz doldurunuz!</p>
                 <Form>
-                  <Form.Field>
-                  <h3>Email: </h3>
-                  <div className="ui left icon input">                 
-                    <i className="user icon"></i>
-                    <input placeholder='Email' type="email" className="form-control" id="email" />
-                    </div>
-                  </Form.Field>
-                  <Form.Field>
-                    <h3>Şifre: </h3>
-                    <div className="ui left icon input">  
-                    <i className="lock icon"></i>
-                    <input placeholder='Şifre'  type="password" className="form-control" id="pasword" />
-                    </div>
-                  </Form.Field>
-                  <Form.Field>
-                    <Checkbox label='Beni hatırla' />
-                  </Form.Field>
+                  <Form.Group widths='equal'>
+                    <Form.Input icon='user' iconPosition='left' onChange={(e) => setUserName(e.target.value)} fluid placeholder='Adınız' />
+                  </Form.Group>
+                  <Form.Group widths='equal'>
+                    <Form.Input icon='user' iconPosition='left' onChange={(e) => setUserSurname(e.target.value)} fluid placeholder='Soyadınız' />
+                  </Form.Group>
+                  <Form.Group widths='equal'>
+                    <Form.Select fluid placeholder='Şehir Seç' options={cities} search />
+                  </Form.Group>
+                  <Form.Group widths='equal'>
+                    <Form.Input type='tel'  icon='mobile' onChange={(e) => setUserPhone(e.target.value)} iconPosition='left' fluid placeholder='Telefon' />
+                  </Form.Group>
+                  <Form.Group widths='equal'>
+                    <Form.Input value={userMail} type='mail'  icon='mail' onChange={(e) => setUserMail(e.target.value)} iconPosition='left' fluid placeholder='Email' />
+                  </Form.Group>
+                  <Form.Group widths='equal'>
+                    <Form.Input value={userPass} type='password' icon='key' onChange={(e) => setUserPass(e.target.value)} iconPosition='left't fluid placeholder='Şifre' />
+                  </Form.Group>
+                  <Button negative onClick={(e) => setModalStatus(false)}><Icon name='remove circle' /> Vazgeç</Button>
+                  <Button primary>
+                    <Icon name='sign-in alternate'></Icon>
+                      Kayıt Ol
+                  </Button>
                 </Form>
-              </Modal.Description>
+            </Modal.Description>
             </Modal.Content>
-            <Modal.Actions>
-              <Button
-                content="Giriş"
-                type="submit"
-                labelPosition='right'
-                icon='checkmark'
-                positive
-              />
-            </Modal.Actions>
-          </Modal>
+            
+            
+            </Modal>
 
 
-          <Modal
-            size="small"
-            onClose={() => setOpen(false)}
-            onOpen={() => setOpen(true)}
-            open={open}
-            trigger={<Button style={{ backgroundColor: "#b7f7a8" }}>Kayıt Ol</Button>}
-          >
-            <Modal.Header style={{textAlign:"center", fontSize:20, color: "tomato", textShadow: "initial"}} >Kayıt Ol</Modal.Header>
+            <Modal
+              open={modalLoginStatus}
+              onClose={ () => setModalLoginStatus(false) }   
+            >
+            
+            <Modal.Header style={{textAlign:"center", fontSize:20, color: "tomato", textShadow: "initial"}}>Üye Girişi</Modal.Header>
             <Modal.Content>
-              <Modal.Description>
-                <Form>
-                <Form.Field>
-                  <h3>Ad: </h3>
-                    <input placeholder='Ad' type="text" className="form-control" id="ad" />              
-                  </Form.Field>
-                  <Form.Field>
-                  <h3>Soyad: </h3>
-                    <input placeholder='Soyad' type="text" className="form-control" id="soyad" />
-                  </Form.Field>
-                  <Form.Field>
-                  <h3>Telefon: </h3>
-                    <input placeholder='Telefon' type="text" className="form-control" id="telefon" />
-                  </Form.Field>
-                  <Form.Field>
-                  <h3>Şehir Kodu: </h3>
-                    <input placeholder='Şehir Kodu' type="number" className="form-control" id="sehirId" />
-                  </Form.Field>
-                  <Form.Field>
-                  <h3>Email: </h3>
-                    <input placeholder='Email' type="email" className="form-control" id="email" />
-                  </Form.Field>
-                  <Form.Field>
-                    <h3>Şifre: </h3>
-                    <input placeholder='Şifre'  type="password" className="form-control" id="pasword" />
-                  </Form.Field>
-                </Form>
-              </Modal.Description>
+            <Modal.Description>
+              <Form>
+                <p>Lütfen aşağıdaki bilgileri eksiksiz doldurunuz!</p>
+                <Form.Group widths='equal'>
+                    <Form.Input value={userMail} onChange={(e,d) => setUserMail( d.value )} type='mail'  icon='mail' iconPosition='left' fluid placeholder='Email' />
+                  </Form.Group>
+                  <Form.Group widths='equal'>
+                    <Form.Input value={userPass}  onChange={(e,d) => setUserPass(d.value)} type='password' icon='key' iconPosition='left' fluid placeholder='Şifre' />
+                  </Form.Group>
+                  <Button negative onClick={(e) => setModalLoginStatus(false)}><Icon name='remove circle' /> Vazgeç</Button>
+                  <Button onClick={(e) => login() } primary>
+                    <Icon name='sign-in alternate'></Icon>
+                      Giriş Yap
+                  </Button>
+              </Form>
+               
+            </Modal.Description>
             </Modal.Content>
-            <Modal.Actions>
-              <Button
-                content="Kayıt Ol"
-                type="submit"
-                labelPosition='right'
-                icon='checkmark'
-                positive
-              />
-            </Modal.Actions>
-          </Modal>
+            
+           
+            
+            
+            </Modal>
+            
 
-
-
-
-          <Icon link name='shopping basket' size='big' style={{ marginTop: 10, marginRight: 10, marginLeft: 10 }}></Icon>
-        </Menu.Menu>
-      </Menu>
     </>
+
   )
 }

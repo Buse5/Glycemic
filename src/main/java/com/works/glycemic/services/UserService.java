@@ -28,6 +28,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDetailsService {
+
     final RoleRepository rRepo;
     final UserRepository uRepo;
     public UserService(RoleRepository rRepo, UserRepository uRepo) {
@@ -51,7 +52,7 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
                     true,
                     getAuthorities( u.getRoles() )
             );
-            return  userDetails;
+            return userDetails;
         }
         throw  new UsernameNotFoundException("User name not found!");
     }
@@ -114,6 +115,7 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
         return null;
     }
 
+
     // User Register Service
     public User adminRegisterService( User user ) {
 
@@ -134,5 +136,17 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
 
         return null;
     }
- //login with security
+
+
+    // login with security
+    public User login( String email ) {
+        Optional<User> oUser = uRepo.findByEmailEqualsIgnoreCase( email );
+        if (oUser.isPresent() ) {
+            User u = oUser.get();
+            //u.setPassword(null);
+            return u;
+        }
+        return null;
+    }
+
 }
