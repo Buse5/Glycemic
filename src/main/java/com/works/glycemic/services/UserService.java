@@ -137,7 +137,6 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
         return null;
     }
 
-
     // login with security
     public User login( String email ) {
         Optional<User> oUser = uRepo.findByEmailEqualsIgnoreCase( email );
@@ -148,5 +147,4 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
         }
         return null;
     }
-
 }

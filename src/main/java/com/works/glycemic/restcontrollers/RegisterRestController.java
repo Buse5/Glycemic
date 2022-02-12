@@ -71,5 +71,4 @@ public class RegisterRestController {
         }
         return hm;
     }
-
 }

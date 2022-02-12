@@ -37,6 +37,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .logout().logoutUrl("/logout").invalidateHttpSession(true);
     }
-
-
 }

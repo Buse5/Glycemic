@@ -4,7 +4,7 @@ import { cities } from '../Datas';
 import { IUser } from '../models/IUser';
 import { userAndAdminLogin } from '../Services';
 import { ToastContainer, toast } from 'react-toastify';
-
+import { encryptData } from '../Util';
 
 export default function NavBar() {
 
@@ -49,8 +49,12 @@ const showLoginModalStatus = () => {
       const usr: IUser = res.data
       if ( usr.status! ) {
         const userResult = usr.result!
-        const stUserResult = JSON.stringify( userResult )
-        localStorage.setItem( "user", stUserResult )
+
+        //key
+        const key=process.env.REACT_APP_SALT
+        const cryptString=encryptData(userResult,key!)
+
+        localStorage.setItem( "user", cryptString )
         setLoginStatus( usr.status! )
       }
       toast.dismiss();
