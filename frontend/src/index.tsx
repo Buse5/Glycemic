@@ -7,11 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // import pages
 import Home from './Home'
+import FoodsAdd from './FoodsAdd';
 // Router
 const router = 
 <Router>
   <Routes>
     <Route path='/' element={ <Home /> } />
+    <Route path='/foodsAdd' element={ <FoodsAdd /> } />
   </Routes>
 </Router> 
 

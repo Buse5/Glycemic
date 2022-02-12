@@ -87,7 +87,6 @@ const showLoginModalStatus = () => {
     setModalLoginStatus(true);
   }
 
-
   // login fnc
   const login = ( e:React.FormEvent ) => {
     e.preventDefault()
