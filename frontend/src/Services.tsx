@@ -28,11 +28,31 @@ export const userAndAdminLogin = ( email:string, password: string ) => {
     const params = {
         email: email
     }
-    return conf.post("register/login", {} , {params: params},)
+    return conf.post("register/login", {} , {params: params})
 
 }
 
 // user and admin logout
 export const logout = () => {
     return axiosConfig.get("register/userLogOut");
+}
+
+// user register
+export const userRegister = ( name:string, surname:string, cityid:number, mobile:string, email:string, password: string ) => {
+
+    const params = {
+        "name": name,
+        "surname": surname,
+        "cityid": cityid,
+        "mobile": mobile,
+        "email": email,
+        "password": password,
+        "enabled": true,
+        "tokenExpired": true,
+        "roles": [
+            { "rid": 0, "name": "role_user" }
+        ]
+    }
+    return axios.post( process.env.REACT_APP_BASE_URL+"/register/userRegister", params )
+
 }

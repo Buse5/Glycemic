@@ -56,8 +56,11 @@ export default function Home() {
   const search = ( q:string ) => {
     setSearchData(q)
     if ( q === "" ) {
-
-      setFoodsArr(searchArr)
+      var newArr:ResultFoods[]=searchArr
+      if(selectCategory!==0){
+        newArr=newArr.filter(item=>item.cid===selectCategory)
+      }
+      setFoodsArr(newArr)
       if(Math.round(searchArr.length%postsperpage) === 0){
         setPageCount(searchArr.length /postsperpage)            
       }else{           
