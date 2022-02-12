@@ -31,3 +31,8 @@ export const userAndAdminLogin = ( email:string, password: string ) => {
     return conf.post("register/login", {} , {params: params},)
 
 }
+
+// user and admin logout
+export const logout = () => {
+    return axiosConfig.get("register/userLogOut");
+}

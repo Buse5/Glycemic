@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 @Service
 @Transactional
 public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDetailsService {
@@ -57,23 +56,18 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
         throw  new UsernameNotFoundException("User name not found!");
     }
 
-
     public User register( User us ) throws AuthenticationException {
-
         Optional<User> uOpt = uRepo.findByEmailEqualsIgnoreCase(us.getEmail());
         if ( uOpt.isPresent() ) {
             return null;
         }
         us.setPassword( encoder().encode( us.getPassword() ) );
         return uRepo.save(us);
-
     }
-
 
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     // User Roles
     private List<GrantedAuthority> getAuthorities (List<Role> roles) {
@@ -90,10 +84,8 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
         super.onLogoutSuccess(request, response, authentication);
     }
 
-
     // User Register Service
     public User userRegisterService( User user ) {
-
         // User Control
         Optional<User> oUser = uRepo.findByEmailEqualsIgnoreCase(user.getEmail());
         if (oUser.isPresent() ) {
@@ -111,10 +103,8 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
                 return register(user);
             }
         }
-
         return null;
     }
-
 
     // User Register Service
     public User adminRegisterService( User user ) {
@@ -133,7 +123,6 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
                 return register(user);
             }
         }
-
         return null;
     }
 
