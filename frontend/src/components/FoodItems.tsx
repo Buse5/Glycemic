@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Grid, Icon, Label } from 'semantic-ui-react';
-import { ResultFoods } from '../models/IFoods';
+import { Button, Grid, Icon, Label, Segment } from 'semantic-ui-react';
+import { ISingleFoods, ResultFoods } from '../models/IFoods';
 import Moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { categories } from '../Datas';
+import { adminhFoodDelete, adminWaitPushFood } from '../Services';
 
 interface foodsModel {
-    item: ResultFoods
+    item: ResultFoods,
+    status?: boolean,
+    isAdmin?: boolean,
 }
 function glyColor(glyIndex: any) {
     if (glyIndex <= 55) {
@@ -23,25 +26,64 @@ function glyColor(glyIndex: any) {
 export default function FoodItems(foods: foodsModel) {
 
     const navigate = useNavigate()
-    // goto detail
-    const fncGotoDetail = (url: string) => {
-        navigate("/detail/" + url)
-    }
+   // goto detail
+   const fncGotoDetail = (url:string) => {
+    //navigate("/details/"+url)
+    window.open("/details/"+url,"_blank")
+}
+
+// goto push
+const fncPush = () => {
+    const itm = foods.item
+    itm.enabled = true
+    adminWaitPushFood(itm).then( res => {
+        const dt:ISingleFoods = res.data
+        if ( dt.status === true) {
+            window.location.href = "/waitFoodsList"
+        }
+    }).catch(err => {
+
+    })
+}
+
+const deleteItem = () => {
+    const itm = foods.item
+    adminhFoodDelete( itm.gid! ).then(res => {
+        const dt:ISingleFoods = res.data
+        if ( dt.status === true) {
+            window.location.href = "/waitFoodsList"
+        }
+    }).catch( err => {
+
+    } )
+}
 
     return <>
         <Grid.Column mobile={8} tablet={8} computer={4}>
-            <div className="ui cards ">
+            <div className="ui cards " >
                 <div className="ui card">
+                
                     <div className="header" style={{ textAlign: "center", backgroundColor: "#54f764", opacity: 0.9 }}>{categories[foods.item.cid!].text}</div>
-                    <div className="header" style={{ textAlign: "center" }}>
+                    {foods.status &&
+                            <> 
+                                <Label as='a' color={foods.item.enabled === true ? 'blue' : 'red'} ribbon>
+                                    {foods.item.enabled === true ? "Yayında" : "İnceleniyor"}
+                                </Label>                            
+                                                           
+                            </>
+                        }
+                    <div className="header" style={{ textAlign: "center" }}>               
                         {foods.item.image !== "" &&
                             <img src={foods.item.image} ></img>
                         }
                         {foods.item.image === "" &&
-                            <img src='./foods.png' style={{width:125, height: 125}} ></img>
+                            <img src='./foods.png' style={{ width: 125, height: 125 }} ></img>
                         }
-                        <h3 className="header" style={{ textAlign: "center" }}>{foods.item.name}</h3>
+                         
+                     
+                         <h3 className="header" style={{ textAlign: "center" }}>{foods.item.name}</h3>
                     </div>
+
                     <div className="content">
                         <div className="meta" >
                             <h3 style={{ textAlign: "center", color: "black" }}>{glyColor(foods.item.glycemicindex)} {foods.item.glycemicindex}</h3>
@@ -71,13 +113,30 @@ export default function FoodItems(foods: foodsModel) {
                     </div>
                     <div className="extra content" >
                         <div className='ui two buttons'>
-                            <Button basic color="green" onClick={() => fncGotoDetail(foods.item.url!)}>
-                                <Icon name="info" /> Detay
-                            </Button>
-                            <Button basic color="red">
-                                <Icon name="food" /> Ekle
-                            </Button>
-                        </div> </div>
+                            {!foods.isAdmin &&
+                                <>
+                                    <Button basic color="green" onClick={() => fncGotoDetail(foods.item.url!)}>
+                                        <Icon name="info" /> Detay
+                                    </Button>
+                                    <Button basic color="red">
+                                        <Icon name="food" /> Ekle
+                                    </Button>
+                                </>
+                            }
+
+                            {foods.isAdmin &&
+                                <>
+                                     <Button  basic color='green' onClick={()=> fncPush() } >
+                    <Icon name='info'/>Yayınla
+                    </Button>
+                    
+                    <Button basic color='red' onClick={()=> deleteItem() }>
+                    <Icon name='delete'/>Sil
+                    </Button>
+                                </>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </Grid.Column>

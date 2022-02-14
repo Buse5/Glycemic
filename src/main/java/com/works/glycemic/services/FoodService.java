@@ -31,6 +31,9 @@ public class FoodService {
             return null;
         }else {
             foods.setEnabled(false);
+            if ( auditAwareConfig.roles().contains("ROLE_admin") ) {
+                foods.setEnabled(true);
+            }
             String after = foods.getName().trim().replaceAll(" +", " ");
             after = WordUtils.capitalize(after);
             foods.setName(after);
@@ -41,7 +44,13 @@ public class FoodService {
 
     // food list
     public List<Foods> foodsList() {
-        return fRepo.findAll();
+        return fRepo.findByEnabledEqualsOrderByGidDesc(true);
+    }
+
+
+    // admin Wait food list
+    public List<Foods> adminWaitFoodList() {
+        return fRepo.findByEnabledEqualsOrderByGidDesc(false);
     }
 
 
@@ -116,7 +125,7 @@ public class FoodService {
                     userFood.setImage(food.getImage());
                     userFood.setSource(food.getSource());
                     userFood.setEnabled(food.isEnabled());
-                    if(food.isEnabled()){
+                    if ( food.isEnabled() ) {
                         cacheManager.getCache("foods_list").clear();
                     }
                     userFood.setUrl( charConvert(userFood.getName()) );

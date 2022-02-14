@@ -30,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers("/foods/save","/foods/userFoodList","/foods/foodDelete","/foods/foodUpdate", "/register/login").hasAnyRole("user", "admin")
+                .antMatchers("/foods/adminWaitFoodList").hasRole("admin")
                 .antMatchers("/foods/list", "foods/detail/**").hasAnyRole("global","user", "admin")
                 .antMatchers("/register/userRegister", "/register/adminRegister").permitAll()
                 .and()

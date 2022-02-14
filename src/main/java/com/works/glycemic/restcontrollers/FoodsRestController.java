@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/foods")
@@ -37,6 +36,7 @@ public class FoodsRestController {
         return hm;
     }
 
+
     // foods List
     @Cacheable("foods_list")
     @GetMapping("/list")
@@ -48,6 +48,7 @@ public class FoodsRestController {
         return hm;
     }
 
+
     // foods List
     @GetMapping("/userFoodList")
     public Map<REnum, Object> userFoodList() {
@@ -58,6 +59,17 @@ public class FoodsRestController {
         return hm;
     }
 
+    // foods List
+    @GetMapping("/adminWaitFoodList")
+    public Map<REnum, Object> adminWaitFoodList() {
+        Map<REnum, Object> hm = new LinkedHashMap<>();
+        hm.put(REnum.status, true);
+        hm.put(REnum.message, "Ürün Listesi");
+        hm.put(REnum.result, foodService.adminWaitFoodList());
+        return hm;
+    }
+
+
     @DeleteMapping("/foodDelete")
     public Map<REnum, Object> foodDelete(@RequestParam long gid) {
         return foodService.foodDelete(gid);
@@ -67,6 +79,7 @@ public class FoodsRestController {
     public Map<REnum,Object> foodUpdate(@RequestBody Foods food){
         return foodService.userUpdateFood(food);
     }
+
 
     @GetMapping("detail/{url}")
     public Map<REnum, Object> singleFoodUrl(@PathVariable String url){
@@ -83,4 +96,6 @@ public class FoodsRestController {
         }
         return hm;
     }
+
+
 }

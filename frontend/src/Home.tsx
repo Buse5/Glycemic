@@ -8,6 +8,7 @@ import { zoomIn } from 'react-animations'
 import styled, { keyframes } from 'styled-components';
 import { Dropdown, DropdownProps, Form, FormField, Grid, Icon, Input, Item, Label, Pagination, PaginationProps, Select } from 'semantic-ui-react';
 import { categories } from './Datas';
+import Footer from './components/Footer';
 
 const animation = keyframes`${zoomIn}`
 const AnimateDiv = styled.div`
@@ -29,45 +30,46 @@ export default function Home() {
   const [postsperpage, setPostsPerPage] = useState(4)
   const [currentPage, setCurrentPage] = useState<number>(1);
   const indexOfLastPost = currentPage * postsperpage;
-  const indexOfFirstPost = indexOfLastPost - postsperpage;
-  var currentpost = foodsArr.slice(indexOfFirstPost, indexOfLastPost);
+  const indexOfFirstPost = indexOfLastPost- postsperpage;
+  var currentpost = foodsArr.slice(indexOfFirstPost,indexOfLastPost); 
 
   useEffect(() => {
-
+    
     toast.loading("Yükleniyor.")
-    allFoodsList().then(res => {
-      const dt: IFoods = res.data;
-      setFoodsArr(dt.result!)
-      setSearchArr(dt.result!)
-      if (Math.round(dt.result!.length % postsperpage) === 0) {
-        setPageCount(dt.result!.length / postsperpage)
-      } else {
-        setPageCount(Math.ceil(dt.result!.length / postsperpage))
-      }
-      toast.dismiss();
-    }).catch(err => {
-      toast.dismiss();
-      toast.error("" + err)
+    allFoodsList().then( res => {
+        const dt:IFoods = res.data;
+        setFoodsArr( dt.result! )
+        setSearchArr( dt.result! )
+        if(Math.round(dt.result!.length%postsperpage) === 0){
+          setPageCount(dt.result!.length /postsperpage)            
+       }else{           
+          setPageCount(Math.ceil(dt.result!.length/postsperpage))              
+        } 
+        toast.dismiss();
+    }).catch( err => {
+        toast.dismiss();
+        toast.error( ""+err )
     })
 
   }, []);
 
 
   const search = ( q:string ) => {
+    setCurrentPage(1)
     setSearchData(q)
     if ( q === "" ) {
-      var newArr:ResultFoods[]=searchArr
-      if(selectCategory!==0){
-        newArr=newArr.filter(item=>item.cid===selectCategory)
+      
+      var newArr: ResultFoods[] = searchArr
+      if ( selectCategory !== 0 ) {
+        newArr = newArr.filter( item => item.cid === selectCategory )
       }
       setFoodsArr(newArr)
-      if(Math.round(searchArr.length%postsperpage) === 0){
-        setPageCount(searchArr.length /postsperpage)            
+      if(Math.round(newArr.length%postsperpage) === 0){
+        setPageCount(newArr.length / postsperpage)            
       }else{           
-        setPageCount(Math.ceil(searchArr.length/postsperpage))              
+        setPageCount(Math.ceil(newArr.length / postsperpage))              
       }
-
-
+      
     }else {
       q = q.toLowerCase()
       var newArr = searchArr.filter( item => item.name?.toLowerCase().includes(q) || (""+item.glycemicindex).includes(q) )
@@ -87,28 +89,22 @@ export default function Home() {
   // select cat
   const catOnChange = ( str: string ) => {
     const numCat = parseInt(str)
+    setCurrentPage(1)
     setSelectCategory( numCat )
-
-    console.log( numCat )
-
     var newArr: ResultFoods[] = searchArr
     if ( numCat !== 0 ) {
       newArr = newArr.filter( item => item.cid === numCat )
-    }
-    
+    }  
     if ( searchData !== "" ) {
       newArr = newArr.filter( item => item.name?.toLowerCase().includes(searchData) || (""+item.glycemicindex).includes(searchData) )
     }
     setFoodsArr(newArr)
-
     console.log( newArr )
-
     if(Math.round(newArr.length%postsperpage) === 0){
       setPageCount(newArr.length /postsperpage)            
     }else{           
         setPageCount(Math.ceil(newArr.length/postsperpage))              
     }
-
   }
   return (
     <>
@@ -134,12 +130,12 @@ export default function Home() {
                   />
                 </Grid.Column>
                 <Grid.Column width='2' >
-                  <Label style={{textAlign:"center"}}>
-                    <Icon name='hand point down outline' style={{marginLeft:7}} /> {foodsArr.length}
+                  <Label style={{ textAlign: "center" }}>
+                    <Icon name='hand point down outline' style={{ marginLeft: 7 }} /> {foodsArr.length}
                   </Label>
                 </Grid.Column>
               </Grid.Row>
-            </Grid>  
+            </Grid>
           </Grid.Column>
           <Grid.Column>
             <Select onChange={(e, data) => catOnChange("" + data.value)} fluid options={categories} placeholder='Kategori Seç' />
@@ -156,13 +152,15 @@ export default function Home() {
 
       <Grid>
         <Pagination
-          defaultActivePage={currentPage}
+          activePage={currentPage}
           pointing
           secondary
           totalPages={pageCount}
           onPageChange={(e: SyntheticEvent, { activePage }: PaginationProps) => setCurrentPage(parseInt("" + activePage!))}
         />
       </Grid>
+      <Grid fluid> <Footer/></Grid>
+     
     </>
   );
 }
