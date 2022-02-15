@@ -8,7 +8,6 @@ import { zoomIn } from 'react-animations'
 import styled, { keyframes } from 'styled-components';
 import { Dropdown, DropdownProps, Form, FormField, Grid, Icon, Input, Item, Label, Pagination, PaginationProps, Select } from 'semantic-ui-react';
 import { categories } from './Datas';
-import Footer from './components/Footer';
 
 const animation = keyframes`${zoomIn}`
 const AnimateDiv = styled.div`
@@ -159,7 +158,6 @@ export default function Home() {
           onPageChange={(e: SyntheticEvent, { activePage }: PaginationProps) => setCurrentPage(parseInt("" + activePage!))}
         />
       </Grid>
-      <Grid fluid> <Footer/></Grid>
      
     </>
   );
