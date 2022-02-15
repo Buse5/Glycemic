@@ -11,3 +11,9 @@
 | React JS | :arrow_right: | 90 |
 
 ## Application Images
+
+<a href="https://github.com/Buse5/Glycemic/blob/master/Images/HomePage.PNG" target="_blank">
+<img src="https://github.com/Buse5/Glycemic/blob/master/Images/HomePage.PNG" width="400" height="200" style="max-width:100%;"></a>
+
+<a href="https://github.com/Buse5/Glycemic/blob/master/Images/MyFoods.PNG" target="_blank">
+<img src="https://github.com/Buse5/Glycemic/blob/master/Images/MyFoods.PNG" width="400" height="200" style="max-width:100%;"></a>
