@@ -1,5 +1,17 @@
 # Glycemic
-Projenin asıl amacı istediğiniz zaman uygulamaya girerek gıdaların glisemik index değerlerine ulaşmaktır. Kullanıcı uygulamaya ilk giriş yaptığında tüm ürünlerin glisemik index değerlerine ulaşabilir. Kullanıcılar kayıt olup giriş yaptıktan sonra gıda eklemesi yapabilirler. Bu gıdalar admin tarafından kontrol edilerek uygun görünmesi halinde yayınlanır, uygun bulunmaz ise silinir.
+-Projenin asıl amacı istediğiniz zaman uygulamaya girerek gıdaların glisemik index değerlerine ulaşmaktır. 
+
+-Kullanıcı uygulamaya ilk giriş yaptığında tüm ürünlerin glisemik index değerlerine ulaşabilir. 
+
+-Kullanıcılar kayıt olup giriş yaptıktan sonra gıda eklemesi yapabilirler. Bu gıdalar admin tarafından kontrol edilerek uygun görünmesi halinde yayınlanır, uygun bulunmaz ise silinir.
+
+-Admin, kullanıcı ve global olmak üzere üç rol vardır. 
+
+-Global kullanıcılar, kayıt olmadan gıdaları inceleyebilirler.
+
+-Kayıtlı kullanıcılar, gıdaları inceleyebilir, gıda ekleyebilirler.
+
+-Admin gıda ekleyebilir, silebilir, kayıtlı kullanıcılardan gelen gıdaları kontrol ederek uygun byulması halinde yayınlayabilir
 
  ## Diller ve Kabiliyetler 👩‍💻
 
