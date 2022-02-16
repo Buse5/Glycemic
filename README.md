@@ -7,9 +7,18 @@ Projenin asıl amacı istediğiniz zaman uygulamaya girerek gıdaların glisemik
 | ------------- |:-------------:|:-------------:|
 | Spring Boot | :arrow_right: | 90 |
 | Spring Security | :arrow_right: | 80 |
+| React JS | :arrow_right: | 90 |
+| Spring-JPA | :arrow_right: | 90 |
 | Semantic UI | :arrow_right: | 90 |
 | H2 Database | :arrow_right: | 90 |
 | React JS | :arrow_right: | 90 |
+
+## Demo Hesap Bilgileri
+
+| E-mail | Password | Role |
+| ------------- |:-------------:|:-------------:|
+| ```buse@mail.com``` | ```12345``` | admin |
+| ```murat@mail.com```| ```12345``` | user|
 
 ## Proje Resimleri
 
