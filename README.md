@@ -1,11 +1,12 @@
 # Glycemic
-
+Projenin asıl amacı istediğiniz zaman uygulamaya girerek gıdaların glisemik index değerlerine ulaşmaktır. Kullanıcı uygulamaya ilk giriş yaptığında tüm ürünlerin glisemik index değerlerine ulaşabilir. Kullanıcılar kayıt olup giriş yaptıktan sonra gıda eklemesi yapabilirler. Bu gıdalar admin tarafından kontrol edilerek uygun görünmesi halinde yayınlanır, uygun bulunmaz ise silinir.
 
  ## Diller ve Kabiliyetler 👩‍💻
 
 | Diller/Kabiliyetler | :arrow_right: | % |
 | ------------- |:-------------:|:-------------:|
 | Spring Boot | :arrow_right: | 90 |
+| Spring Security | :arrow_right: | 80 |
 | Semantic UI | :arrow_right: | 90 |
 | H2 Database | :arrow_right: | 90 |
 | React JS | :arrow_right: | 90 |
