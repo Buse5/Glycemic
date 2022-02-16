@@ -12,6 +12,7 @@ Projenin asıl amacı istediğiniz zaman uygulamaya girerek gıdaların glisemik
 | Semantic UI | :arrow_right: | 90 |
 | H2 Database | :arrow_right: | 90 |
 | React JS | :arrow_right: | 90 |
+| TypeScript | :arrow_right: | 80 |
 
 ## Demo Hesap Bilgileri
 
