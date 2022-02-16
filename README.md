@@ -3,7 +3,7 @@ Projenin asıl amacı istediğiniz zaman uygulamaya girerek gıdaların glisemik
 
  ## Diller ve Kabiliyetler 👩‍💻
 
-| Diller/Kabiliyetler | :arrow_right: | % |
+| Dil / Kabiliyet | :arrow_right: | % |
 | ------------- |:-------------:|:-------------:|
 | Spring Boot | :arrow_right: | 90 |
 | Spring Security | :arrow_right: | 80 |
