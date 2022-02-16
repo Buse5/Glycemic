@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { Menu, Button, Modal, Form, Icon, Label, MenuItem, Header } from 'semantic-ui-react'
+import { Menu, Button, Modal, Form, Icon, Label, MenuItem, Header, Feed, Card } from 'semantic-ui-react'
 import { cities } from '../Datas';
 import { IUser, UserResult } from '../models/IUser';
 import { logout, userAndAdminLogin, userRegister } from '../Services';
 import { ToastContainer, toast } from 'react-toastify';
-import { control, encryptData } from '../Util';
+import { allDataBasket, control, deleteItemBasket, encryptData } from '../Util';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { ResultFoods } from '../models/IFoods';
 
 export default function NavBar() {
 
   const [activeItem, setActiveItem] = useState("Anasayfa")
-  
-  // modal delete state
+
+  // modal delete
   const [modalStatus, setModalStatus] = useState(false);
   const [modalLoginStatus, setModalLoginStatus] = useState(false)
 
-  // login and register states
+  // login and register
   const [userName, setUserName] = useState("");
   const [userSurname, setUserSurname] = useState("");
   const [userPhone, setUserPhone] = useState("");
@@ -23,7 +24,7 @@ export default function NavBar() {
   const [userPass, setUserPass] = useState("");
   const [cityId, setCityId] = useState('0')
 
-  // login user object
+  // login user
   const [user, setUser] = useState<UserResult | null>()
 
   // logout
@@ -38,115 +39,129 @@ export default function NavBar() {
     if (usr !== null) {
       setUser(usr)
       usr.roles!.forEach(item => {
-        if ( item.name === "ROLE_admin" ) {
+        if (item.name === "ROLE_admin") {
           setIsAdmin(true)
         }
       });
     }
   }, [loginStatus])
 
-  // url control and menu active
-  const urlActive = () => {
-    if ( loc.pathname === "/" ) {
-      setActiveItem("Anasayfa")
-    }
-    if ( loc.pathname === "/foodsAdd" ) {
-      setActiveItem("Gıda Ekle")
-    }
-    if ( loc.pathname === "/foodsList" ) {
-      setActiveItem("Eklediklerim")
-    }
-    if ( loc.pathname === "/waitFoodsList" ) {
-      setActiveItem("Bekleyenler")
-    }
+  const fncSetVisible = () => {
+    setVisible(false)
   }
-  
+
   // useNavigate
   const navigate = useNavigate()
   const loc = useLocation()
-   
-  const handleItemClick = (name:string) => {
+
+  const handleItemClick = (name: string) => {
     console.log('name', name)
     setActiveItem(name)
 
-    if ( name === "Anasayfa" ) {
+    if (name === "Anasayfa") {
       navigate("/")
     }
-
-    if ( name === "Gıda Ekle" ) {
-      if ( control() === null ) {
+    if (name === "Gıda Ekle") {
+      if (control() === null) {
         setModalLoginStatus(true);
-      }else {
+      } else {
         navigate("/foodsAdd")
       }
     }
-
-
-    if ( name === "Eklediklerim" ) {
-      if ( control() === null ) {
+    if (name === "Eklediklerim") {
+      if (control() === null) {
         setModalLoginStatus(true);
-      }else {
+      } else {
         navigate("/foodsList")
       }
     }
-
-    if ( name === "Bekleyenler" ) {
-      if ( control() === null ) {
+    if (name === "Bekleyenler") {
+      if (control() === null) {
         setModalLoginStatus(true);
-      }else {
+      } else {
         navigate("/waitFoodsList")
       }
     }
-
   }
 
   const showModal = () => {
     setModalStatus(true);
   }
 
-const showLoginModalStatus = () => {
+  const showLoginModalStatus = () => {
     setModalLoginStatus(true);
   }
 
+  // url control and menu active
+  const urlActive = () => {
+    if (loc.pathname === "/") {
+      setActiveItem("Anasayfa")
+    }
+    if (loc.pathname === "/foodsAdd") {
+      setActiveItem("Gıda Ekle")
+    }
+    if (loc.pathname === "/foodsList") {
+      setActiveItem("Eklediklerim")
+    }
+    if (loc.pathname === "/waitFoodsList") {
+      setActiveItem("Bekleyenler")
+    }
+  }
 
   // login fnc
   let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-  const login = ( e:React.FormEvent ) => {
+  const login = (e: React.FormEvent) => {
     e.preventDefault()
     if (userMail == '') {
       toast.warning('Lütfen email alanını doldurunuz!');
-    }else if (regemail.test(userMail) === false){
-      toast.warning('Lütfen geçerli bir email giriniz!')        
-    }else if (userPass == ''){
-      toast.warning('Lütfen şifre alanını doldurunuz!');    
-    }else{
+    } else if (regemail.test(userMail) === false) {
+      toast.warning('Lütfen geçerli bir email giriniz!')
+    } else if (userPass == '') {
+      toast.warning('Lütfen şifre alanını doldurunuz!');
+    } else {
       toast.loading("Yükleniyor.")
-      userAndAdminLogin(userMail, userPass).then( res => {
+      userAndAdminLogin(userMail, userPass).then(res => {
         const usr: IUser = res.data
-        if ( usr.status! ) {
+        if (usr.status!) {
           const userResult = usr.result!
           // key
           const key = process.env.REACT_APP_SALT
           const cryptString = encryptData(userResult, key!)
           const userAutString = encryptData(res.config.headers, key!)
-          localStorage.setItem( "user", cryptString )
-          localStorage.setItem( "aut", userAutString )
-          setLoginStatus( usr.status! )
+          localStorage.setItem("user", cryptString)
+          localStorage.setItem("aut", userAutString)
+          setLoginStatus(usr.status!)
           setModalLoginStatus(false)
         }
         toast.dismiss();
-      }).catch( err => {
+      }).catch(err => {
         toast.dismiss();
-        toast.error( "Bu yetkilerde bir kullanıcı yok!" )
+        toast.error("Bu yetkilerde bir kullanıcı yok!")
       })
     }
   }
 
+  // log out fnc
+  const fncLogOut = () => {
+    toast.loading("Yükleniyor.")
+    logout().then(res => {
+      localStorage.removeItem("user")
+      setIsLogOut(false)
+      setUser(null)
+      setLoginStatus(false)
+      setIsAdmin(false)
+      toast.dismiss();
+      window.location.href = "/"
+    }).catch(err => {
+      toast.dismiss();
+      toast.error("Çıkış işlemi sırasında bir hata oluştu!")
+    })
+  }
 
   // register fnc
   let regphone = /^[0]?[5]\d{9}$/;
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-  const register = ( e: React.FormEvent ) => {
+  const register = (e: React.FormEvent) => {
     e.preventDefault()
     if (userName == '') {
       toast.warning('Lütfen isim alanını doldurunuz!');
@@ -154,60 +169,53 @@ const showLoginModalStatus = () => {
       toast.warning('Lütfen soyadı alanını doldurunuz!');
     } else if (userPhone == '') {
       toast.warning('Lütfen telefon alanını doldurunuz!');
-    }else if (regphone.test(userPhone) === false) {
+    } else if (regphone.test(userPhone) === false) {
       toast.warning('Lütfen geçerli bir telefon numarası giriniz!');
     } else if (userMail == '') {
       toast.warning('Lütfen email alanını doldurunuz!');
-    }else if (regemail.test(userMail) === false){
-      toast.warning('Lütfen geçerli bir email giriniz!')        
-    }    
+    } else if (regemail.test(userMail) === false) {
+      toast.warning('Lütfen geçerli bir email giriniz!')
+    }
     else if (userPass == '') {
       toast.warning('Lütfen şifre alanını doldurunuz!');
-    }else if (userPass.length <= 8){      
+    } else if (userPass.length <= 8) {
       toast.warning('Şifre 8 karakterden kısa olamaz!');
     }
     else if (!strongRegex.test(userPass)) {
-      toast.warning('Şifreniz en az bir büyük bir küçük harf özel işaret ve numara içermelidir!'); 
-    }else{
+      toast.warning('Şifreniz en az bir büyük bir küçük harf özel işaret ve numara içermelidir!');
+    } else {
       toast.loading("Yükleniyor.")
-      userRegister( userName, userSurname, parseInt(cityId), userPhone, userMail, userPass )
-      .then(res => {
-
-        const usr:IUser = res.data
-        toast.dismiss();
-        if ( usr.status ) {
-          // kayıt başarılı
-          toast.info("Kayıt işlemi başarılı oldu, Lütfen giriş yapınız")
-          setModalStatus(false)
-          setModalLoginStatus(true)
-        }else {
-          toast.error( usr.message )
-        }
-      
-      }).catch(err => {
-        toast.dismiss();
-        toast.error( "Kayıt işlemi sırasında bir hata oluştu!" )
-      })
+      userRegister(userName, userSurname, parseInt(cityId), userPhone, userMail, userPass)
+        .then(res => {
+          const usr: IUser = res.data
+          toast.dismiss();
+          if (usr.status) {
+            // kayıt başarılı
+            toast.info("Kayıt işlemi başarılı oldu, Lütfen giriş yapınız")
+            setModalStatus(false)
+            setModalLoginStatus(true)
+          } else {
+            toast.error(usr.message)
+          }
+        }).catch(err => {
+          toast.dismiss();
+          toast.error("Kayıt işlemi sırasında bir hata oluştu!")
+        })
     }
   }
 
-  // log out fnc
-  const fncLogOut = () => {
-      toast.loading("Yükleniyor.")
-      logout().then( res => {
-        localStorage.removeItem("user")
-        setIsLogOut(false)
-        setUser(null)
-        setLoginStatus(false)
-        setIsAdmin(false)
-        toast.dismiss();
-        window.location.href = "/"
-    }).catch(err => {
-      toast.dismiss();
-      toast.error( "Çıkış işlemi sırasında bir hata oluştu!" )
-    })
-  }
+  // basket action
+  const [basketCount, setBasketCount] = useState(0)
+  const [visible, setVisible] = useState(false)
+  const [basketItems, setBasketItems] = useState<ResultFoods[]>([])
+  //basket
+  useEffect(() => {
+    setBasketItems(allDataBasket())
+  }, [visible])
 
+  const deleteFnc = (index: number) => {
+    setBasketItems(deleteItemBasket(index))
+  }
 
   return (
     <>
@@ -230,13 +238,13 @@ const showLoginModalStatus = () => {
           active={activeItem === 'Eklediklerim'}
           onClick={(e, data) => handleItemClick(data.name!)}
         />
-         { isAdmin === true && 
-              <Menu.Item
-              name='Bekleyenler'
-              active={activeItem === 'Bekleyenler'}
-              onClick={ (e, data) => handleItemClick(data.name!) }
-              />
-            }
+        {isAdmin === true &&
+          <Menu.Item
+            name='Bekleyenler'
+            active={activeItem === 'Bekleyenler'}
+            onClick={(e, data) => handleItemClick(data.name!)}
+          />
+        }
 
         <Menu.Menu position='right'>
           {!user &&
@@ -255,22 +263,54 @@ const showLoginModalStatus = () => {
           }
           {user &&
             <>
-              <MenuItem>
-                <Label style={{ backgroundColor: "tomato", opacity: 0.9 }}>
-                  <Icon name="user outline" /> {user.name} {user.surname}
-                </Label>
-              </MenuItem>
-              <MenuItem>
-                <Icon name="shopping basket" size="big" />
-              </MenuItem>
-              <Menu.Item
+             <Menu.Item
                 name='Çıkış Yap'
                 active={activeItem === 'Çıkış Yap'}
                 onClick={(e, data) => setIsLogOut(true)}
               />
+              <MenuItem>
+                <Label style={{ backgroundColor: "#56d177", opacity: 0.9, height:35 }}>
+                  <Icon name="user outline"  style={{marginTop:7}}/> {user.name} {user.surname}
+                </Label>
+              </MenuItem>
+            
             </>
           }
+          <Menu.Item>
+            <Button animated='vertical' onClick={(e, d) => setVisible(!visible)} style={{ backgroundColor: "#56d177", opacity: 0.8 }}>
+              <Button.Content visible> {basketItems.length} </Button.Content>
+              <Button.Content hidden>
+                <Icon name='shop' />
+              </Button.Content>
+            </Button>
+          </Menu.Item>
         </Menu.Menu>
+        {visible &&
+          <Card style={{ position: 'absolute', zIndex: 2, top: 72, right: '0.5%' }}>
+            <Card.Content>
+              <Card.Header>Menünüz</Card.Header>
+            </Card.Content>
+            <Card.Content>
+              <Feed>
+                {basketItems.map((item, index) =>
+                  <Feed.Event key={index}>
+                    <Feed.Label image={item.image === "" ? './foods.png' : item.image} />
+                    <Feed.Content>
+                      <Feed.Date content={item.glycemicindex} />
+                      <Feed.Summary>
+                        {item.name}
+                      </Feed.Summary>
+                    </Feed.Content>
+                    <Feed.Content style={{ textAlign: 'right' }}>
+                      <Button onClick={(e, d) => deleteFnc(index)} size='mini' color='red' >
+                        <Button.Content><Icon name='delete'></Icon></Button.Content>
+                      </Button>
+                    </Feed.Content>
+                  </Feed.Event>
+                )}
+              </Feed>
+            </Card.Content>
+          </Card> }
       </Menu>
 
       <Modal

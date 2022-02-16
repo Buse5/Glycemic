@@ -2,7 +2,6 @@ import axios from "axios";
 import { ResultFoods } from "./models/IFoods";
 import { autControl } from "./Util";
 
-
 const axiosConfig = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
     auth:{
@@ -10,7 +9,6 @@ const axiosConfig = axios.create({
         password: process.env.REACT_APP_GLOBAL_PASSWORD!
     }
 })
-
 
 // All Foods List
 export const allFoodsList = () => {
@@ -31,7 +29,6 @@ export const userAndAdminLogin = ( email:string, password: string ) => {
         email: email
     }
     return conf.post("register/login", {} , {params: params})
-
 }
 
 // user and admin logout
@@ -56,7 +53,6 @@ export const userRegister = ( name:string, surname:string, cityid:number, mobile
         ]
     }
     return axios.post( process.env.REACT_APP_BASE_URL+"/register/userRegister", params )
-
 }
 
 //food detail
@@ -64,7 +60,6 @@ export const foodDetails = (url:string) => {
     const urltosend:string= "/foods/detail/"+url
     return axiosConfig.get(process.env.REACT_APP_BASE_URL+urltosend)
 }
-
 
 //food add
 export const foodAdd = (cid:number, name:string, glycemicindex:number, image:string, source:string) => {
@@ -83,7 +78,6 @@ export const foodAdd = (cid:number, name:string, glycemicindex:number, image:str
   })
 }
  
-
 // user foods list
 export const userFoodList = () => {
     const headers = autControl()
@@ -99,9 +93,6 @@ export const adminWaitFoodList = () => {
         headers: headers
     })
 }
-
-
-
 
 // admin wait foods push update
 export const adminWaitPushFood = (item: ResultFoods) => {
@@ -120,7 +111,6 @@ export const adminWaitPushFood = (item: ResultFoods) => {
       headers: headers
   })
 }
-
 
 // admin wait foods push update
 export const adminhFoodDelete = ( gid: number ) => {

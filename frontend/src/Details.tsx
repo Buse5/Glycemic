@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { zoomIn } from 'react-animations'
 import { useParams } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
-import { Card, Item } from 'semantic-ui-react'
+import { Card, Icon, Item } from 'semantic-ui-react'
 import styled, { keyframes } from 'styled-components'
 import NavBar from './components/NavBar'
 import { categories } from './Datas'
@@ -27,7 +27,16 @@ export default function Details() {
             toast.error("" + err)
         })
     }, [])
-
+    function glyColor(glyIndex: any) {
+        if (glyIndex <= 55) {
+            return <div style={{ backgroundColor: "#00d900", borderRadius: 20 }}><Icon link name='pointing down' /> Glycemic Index  <Icon link name='pointing down' /></div>
+        } else if (glyIndex > 55 && glyIndex <= 70) {
+            return <div style={{ backgroundColor: "orange", borderRadius: 20 }}><Icon link name='pointing down' /> Glycemic Index  <Icon link name='pointing down' /> </div>
+        } else {
+            return <div style={{ backgroundColor: "#ff0000", borderRadius: 20 }}><Icon link name='pointing down' /> Glycemic Index  <Icon link name='pointing down' /> </div>
+        }
+    
+    }
     return (
         <>
              <ToastContainer />
@@ -35,50 +44,53 @@ export default function Details() {
       <AnimateDiv >
         <h1 style={{ textAlign: "center", color: "tomato", textShadow: "initial", fontFamily: "monospace", fontSize: 50 }}> {food?.name} Detayı</h1>
       </AnimateDiv>
-            <Card.Group mobile={8} tablet={8} computer={4}>
+      <Card.Group>
                 <Card fluid>
-                      <div className="header" style={{ textAlign: "center", backgroundColor: "#54f764", opacity: 0.9 }}>{categories[food?.cid!].text}</div>
                     <Card.Content>
+
                         {food?.image !== "" &&
-                            <Item.Image
+                            <Item.Image              
                                 floated='right'
                                 size='small'
                                 src={food?.image}
                             />
                         }
+
                         {food?.image === "" &&
                             <Item.Image
                                 floated='right'
-                                size='small'
+                                size='tiny'
                                 src='../foods.png'
                             />
                         }
-                        
-                        <Card.Header >{food?.name} </Card.Header>
+                        <div className="meta" >
+                            <h3 style={{ textAlign: "center", color: "black", marginRight:380, marginLeft:380, marginTop:20}}>{glyColor(food?.glycemicindex)} {food?.glycemicindex}</h3>
+                        </div>
+                  
                         <div className="extra content" >Created By:
-                        <span >
+                        <span style={{marginTop:20}}>
                             {food?.createdBy}
                         </span >
-                        <br></br>Modified By: 
-                        <span  >
+                        <br></br>Modified By:
+                        <span style={{marginTop:20}}>
                             {food?.modifiedBy}
                         </span>
-                    </div>
-                    <div className="extra content" style={{ marginTop: '10px' }} >
-                        Crated  Date: 
-                        
-                        <span >
-                            <i className="calendar icon" ></i>
-                            {moment(food?.createdDate).format("DD/MM/YY")}
-                        </span>
-                        <br></br>
-                        Modified Date: 
-                        <span >
+                        </div>     
+                        <div className="extra content" style={{marginTop:20}}>
+                        <span style={{marginTop:20}}>
+                        Crated  Date:                     
                             <i className="calendar icon"></i>
-                            {moment(food?.modifiedDate).format("DD/MM/YY")}
-                        </span>
+                            {moment(food?.createdDate).format("DD/MM/YY")}  
+                            </span>   
+                            <br></br>                
+                            <span style={{marginTop:20}}>
+                        Modified Date:                       
+                            <i className="calendar icon" ></i>
+                            {moment(food?.modifiedDate).format("DD/MM/YY")}       
+                            </span>               
                     </div>
                     </Card.Content>
+
                 </Card>
             </Card.Group>
         </>

@@ -5,6 +5,7 @@ import Moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { categories } from '../Datas';
 import { adminhFoodDelete, adminWaitPushFood } from '../Services';
+import { basketAdd } from '../Util';
 
 interface foodsModel {
     item: ResultFoods,
@@ -22,9 +23,11 @@ function glyColor(glyIndex: any) {
 
 }
 
-
 export default function FoodItems(foods: foodsModel) {
-
+    const addBasket=()=>{
+        basketAdd(foods.item)
+    }
+    
     const navigate = useNavigate()
    // goto detail
    const fncGotoDetail = (url:string) => {
@@ -97,20 +100,7 @@ const deleteItem = () => {
                         <span className="right floated" >
                             {foods.item.modifiedBy}
                         </span>
-                    </div>
-                    <div className="extra content" >
-                        Crated  Date:
-                        <span className="right floated">
-                            <i className="calendar icon"></i>
-                            {Moment(foods.item.createdDate).format("DD/MM/YY")}
-                        </span>
-                        <br></br>
-                        Modified Date:
-                        <span className="right floated">
-                            <i className="calendar icon"></i>
-                            {Moment(foods.item.modifiedDate).format("DD/MM/YY")}
-                        </span>
-                    </div>
+                    </div>               
                     <div className="extra content" >
                         <div className='ui two buttons'>
                             {!foods.isAdmin &&
@@ -118,9 +108,10 @@ const deleteItem = () => {
                                     <Button basic color="green" onClick={() => fncGotoDetail(foods.item.url!)}>
                                         <Icon name="info" /> Detay
                                     </Button>
-                                    <Button basic color="red">
-                                        <Icon name="food" /> Ekle
-                                    </Button>
+                                    <Button onClick={(e,d) => addBasket() } basic color='red' animated='vertical' >
+                        <Button.Content visible><Icon name='food'/>Ekle</Button.Content>
+                        <Button.Content hidden><Icon name='shop'/>Ekle</Button.Content>
+                    </Button>
                                 </>
                             }
 
