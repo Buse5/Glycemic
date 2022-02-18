@@ -13,6 +13,10 @@
 
 -Admin gıda ekleyebilir, silebilir, kayıtlı kullanıcılardan gelen gıdaları kontrol ederek uygun byulması halinde yayınlayabilir
 
+ ## DEMO
+ <p><em><a href="https://glycemicindex.herokuapp.com/">DEMO</a></br>
+ (Proje de veriler h2 veritabanı kullanıldığı için gelmemektedir.)
+
  ## Diller ve Kabiliyetler 👩‍💻
 
 | Dil / Kabiliyet | :arrow_right: | % |
